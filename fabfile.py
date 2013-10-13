@@ -60,10 +60,19 @@ def vagrant(name=''):
 
 
 @task
+def santa_maria():
+    env['user'] = 'root'
+    env['askbot_user'] = 'askbot'
+    env['hosts'] = ['santa-maria.stephane-klein.info:2017']
+
+
+@task
 def install():
+    fabtools.require.system.locale('fr_FR.UTF-8')
     fabtools.deb.update_index()
     fabtools.deb.upgrade()
     fabtools.deb.install([
+        'build-essential', 'sudo',
         'python', 'python-dev', 'python-pip', 'python-virtualenv',
         'git', 'postgresql-9.1', 'postgresql-server-dev-9.1',
         'memcached', 'supervisor', 'nginx', 'postfix'
@@ -73,7 +82,10 @@ def install():
         fabtools.postgres.create_user('askbot', password='password')
 
     if not fabtools.postgres.database_exists('askbot'):
-        fabtools.postgres.create_database('askbot', owner='askbot')
+        fabtools.postgres.create_database(
+            'askbot', owner='askbot',
+            locale='fr_FR.UTF-8'
+        )
 
     if env['askbot_user'] != 'vagrant':
         _add_user(
@@ -105,7 +117,7 @@ def install():
             run('bin/python manage.py add_askbot_user --email=contact@stephane-klein.info --password=password --user-name=stephane-klein')
             run('bin/python manage.py add_admin 1 --noinput')
 
-        put('assets/askbot/media/style/style.css', '/home/vagrant/prod/static/default/media/style/style.css')
+        put('assets/askbot/media/style/style.css', '/home/%s/prod/static/default/media/style/style.css' % env['askbot_user'])
 
     fabtools.require.supervisor.process(
         'askbot_prod',
