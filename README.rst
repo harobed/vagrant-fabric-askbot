@@ -6,12 +6,14 @@ This repository contain my `askbot <http://askbot.org/>`_ installation script fo
 
 Contact : contact@stephane-klein.info
 
+The Vagrant VM is a Debian Wheezy 64.
 
 Instructions
 ============
 
 Prerequisites :
 
+* GNU/Linux or MacOSX
 * `Python <http://www.python.org/>`_
 * `Vagrant 1.2.5 or upper <http://downloads.vagrantup.com/>`_
 * `Virtualbox <https://www.virtualbox.org/>`_

@@ -61,79 +61,92 @@ def vagrant(name=''):
 
 @task
 def install():
-    fabtools.deb.update_index()
-    fabtools.deb.upgrade()
-    fabtools.deb.install([
-        'python', 'python-dev', 'python-pip', 'python-virtualenv',
-        'git', 'postgresql-9.1', 'postgresql-server-dev-9.1',
-        'memcached', 'supervisor', 'nginx', 'postfix'
-    ])
-    run('pip install -U pip virtualenv')
-    if not fabtools.postgres.user_exists('askbot'):
-        fabtools.postgres.create_user('askbot', password='password')
+    #fabtools.deb.update_index()
+    #fabtools.deb.upgrade()
+    #fabtools.deb.install([
+        #'python', 'python-dev', 'python-pip', 'python-virtualenv',
+        #'git', 'postgresql-9.1', 'postgresql-server-dev-9.1',
+        #'memcached', 'supervisor', 'nginx', 'postfix'
+    #])
+    #run('pip install -U pip virtualenv')
+    #if not fabtools.postgres.user_exists('askbot'):
+        #fabtools.postgres.create_user('askbot', password='password')
 
-    if not fabtools.postgres.database_exists('askbot'):
-        fabtools.postgres.create_database('askbot', owner='askbot')
+    #if not fabtools.postgres.database_exists('askbot'):
+        #fabtools.postgres.create_database('askbot', owner='askbot')
 
-    if env['askbot_user'] != 'vagrant':
-        _add_user(
-            name='askbot',
-            password=None,
-            shell='/bin/bash'
-        )
+    #if env['askbot_user'] != 'vagrant':
+        #_add_user(
+            #name='askbot',
+            #password=None,
+            #shell='/bin/bash'
+        #)
 
-    askbot_home = '/home/%s/prod/' % env['askbot_user']
+    #askbot_home = '/home/%s/prod/' % env['askbot_user']
+    #with settings(user=env['askbot_user']):
+        #run('echo "localhost:5432:askbot:askbot:password" > ~/.pgpass')
+        #run('chmod 0600 ~/.pgpass')
+        #run('mkdir -p %s' % askbot_home)
+        #with cd(askbot_home):
+            #run('virtualenv .')
+            #run('git clone https://github.com/harobed/askbot-devel.git')
+            #run('cd askbot-devel && ../bin/python setup.py develop')
+            #run('bin/pip install psycopg2 gunicorn python-memcached')
+
+            #run('bin/askbot-setup -n . -e 1 -d askbot -u askbot -p password')
+
+            #fabtools.files.upload_template(
+                #'%ssettings.py' % askbot_home,
+                #os.path.join(here, 'assets/settings.py')
+            #)
+            #run('bin/python manage.py syncdb --all --noinput')
+            #run('bin/python manage.py migrate --all --fake')
+            #run('bin/python manage.py collectstatic  --noinput')
+            #run('bin/python manage.py add_askbot_user --email=contact@stephane-klein.info --password=password --user-name=stephane-klein')
+            #run('bin/python manage.py add_admin 1 --noinput')
+
+    #fabtools.require.supervisor.process(
+        #'askbot_prod',
+        #command='%sbin/python manage.py run_gunicorn -b unix:/tmp/askbot_prod.sock' % askbot_home,  # NOQA
+        #directory=askbot_home,
+        #user=env['askbot_user'],
+        #stdout_logfile='%sprod.log' % askbot_home,
+    #)
+
+    #fabtools.require.nginx.site(
+        #'questions.revenudebase.info',
+        #template_contents="""
+#server {
+        #listen 80;
+        #server_name %(server_name)s;
+
+        #location ~ /m(.*) {
+            #alias %(askbot_home)sstatic$1;
+        #}
+
+        #location ~ /upfiles(.*) {
+            #alias %(askbot_home)saskbot/upfiles$1;
+        #}
+
+        #location / {
+            #proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            #proxy_set_header Host $http_host;
+            #proxy_redirect off;
+            #proxy_pass http://unix:/tmp/askbot_prod.sock:/;
+        #}
+#}
+#""",
+        #enabled=True,
+        #askbot_home=askbot_home
+    #)
+
+    # init default configuration value
+
     with settings(user=env['askbot_user']):
-        run('mkdir -p %s' % askbot_home)
-        with cd(askbot_home):
-            run('virtualenv .')
-            run('git clone https://github.com/harobed/askbot-devel.git')
-            run('cd askbot-devel && ../bin/python setup.py develop')
-            run('bin/pip install psycopg2 gunicorn python-memcached')
+        put('assets/livesettings_setting.sql', '/tmp/')
+        put('assets/livesettings_longsetting.sql', '/tmp/')
 
-            run('bin/askbot-setup -n . -e 1 -d askbot -u askbot -p password')
-
-            fabtools.files.upload_template(
-                '%ssettings.py' % askbot_home,
-                os.path.join(here, 'assets/settings.py')
-            )
-            run('bin/python manage.py syncdb --all --noinput')
-            run('bin/python manage.py migrate --all --fake')
-            run('bin/python manage.py collectstatic  --noinput')
-            run('bin/python manage.py add_askbot_user --email=contact@stephane-klein.info --password=password --user-name=stephane-klein')
-            run('bin/python manage.py add_admin 1 --noinput')
-
-    fabtools.require.supervisor.process(
-        'askbot_prod',
-        command='%sbin/python manage.py run_gunicorn -b unix:/tmp/askbot_prod.sock' % askbot_home,  # NOQA
-        directory=askbot_home,
-        user=env['askbot_user'],
-        stdout_logfile='%sprod.log' % askbot_home,
-    )
-
-    fabtools.require.nginx.site(
-        'questions.revenudebase.info',
-        template_contents="""
-server {
-        listen 80;
-        server_name %(server_name)s;
-
-        location ~ /m(.*) {
-            alias %(askbot_home)sstatic$1;
-        }
-
-        location ~ /upfiles(.*) {
-            alias %(askbot_home)saskbot/upfiles$1;
-        }
-
-        location / {
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header Host $http_host;
-            proxy_redirect off;
-            proxy_pass http://unix:/tmp/askbot_prod.sock:/;
-        }
-}
-""",
-        enabled=True,
-        askbot_home=askbot_home
-    )
+        run('psql -U askbot -h localhost -d askbot -c "delete from livesettings_setting;"')
+        run('psql -U askbot -h localhost -d askbot -c "delete from livesettings_longsetting;"')
+        run('psql -U askbot -h localhost -d askbot -f /tmp/livesettings_setting.sql')
+        run('psql -U askbot -h localhost -d askbot -f /tmp/livesettings_longsetting.sql')
