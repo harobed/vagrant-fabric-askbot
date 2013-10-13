@@ -1,0 +1,6 @@
+.Python
+.vagrant
+bin/
+*.pyc
+include/
+lib/
