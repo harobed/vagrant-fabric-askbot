@@ -837,7 +837,7 @@ body.anon.ask-page .search-drop-menu {
   margin-left: 228px;
 }
 .scopes-True-True-False #scopeNav {
-  width: 180px;
+  width: 350px;
 }
 .scopes-True-False-True #searchBar,
 .scopes-True-False-True .search-drop-menu {
@@ -1078,7 +1078,7 @@ body.anon.ask-page .search-drop-menu {
   -webkit-box-shadow: 1px 1px 3px #999999;
   -moz-box-shadow: 1px 1px 3px #999999;
   box-shadow: 1px 1px 3px #999999;
-  padding: 7px 10px 1px 10px;
+  padding: 7px 10px 1px 0;
   margin-bottom: 10px;
   width: 100%;
 }
@@ -1374,31 +1374,34 @@ ul#searchTags {
 .paginator a {
   color: #7ea9b3;
 }
-.paginator .prev {
-  margin-right: .5em;
-}
+.paginator .prev,
 .paginator .next {
-  margin-left: .5em;
+  margin-right: .5em;
 }
 .paginator .page a,
 .paginator .page a:visited,
 .paginator .curr {
-  padding: .25em;
-  background-color: #fff;
-  margin: 0em .25em;
-  color: #ff;
+  padding: 0 .25em;
+  margin: 0em .15em 0 0;
 }
 .paginator .curr {
-  background-color: #8ebcc7;
+  /*background-color: #8ebcc7;*/
+
   color: #fff;
   font-weight: bold;
 }
-.paginator .next a,
-.paginator .prev a {
-  color: #7ea9b3;
+.paginator .curr a {
+  background: #8ebcc7;
+  color: white;
+  /*padding: 0;*/
+
+}
+.paginator .curr.page a:hover {
+  background: #8ebcc7;
+  color: white;
+  padding: 0 0.25em;
 }
 .paginator .page a:hover,
-.paginator .curr a:hover,
 .paginator .prev a:hover,
 .paginator .next a:hover {
   color: #8C8C8C;
@@ -1631,6 +1634,13 @@ ul#related-tags li {
 }
 .delete-icon:hover {
   background: #b32f2f;
+}
+.expander .wait-icon-box {
+  display: inline-block;
+  margin: 0;
+}
+.snippet:hover .expander a {
+  text-decoration: underline;
 }
 .tag-number {
   font-weight: normal;
@@ -2112,6 +2122,7 @@ ul#related-tags li {
   font-family: Arial;
   color: #4b4b4b;
   word-wrap: break-word;
+  max-width: 683px;
 }
 .question-page .post-body a {
   color: #1b79bd;
@@ -2357,6 +2368,9 @@ ul#related-tags li {
 .question-page .comments {
   font-size: 12px;
   clear: both;
+}
+.question-page .comments .truncated-post:nth-last-child(3) {
+  float: left;
 }
 .question-page .comments div.controls {
   width: 100%;
@@ -2756,6 +2770,24 @@ ul#related-tags li {
   background-position: -52px 0px;
 }
 /* -----Content pages, Login, About, FAQ, Users----- */
+.openid-signin input[type="text"],
+.openid-signin input[type="password"] {
+  color: #525252;
+  font-size: 12px;
+  line-height: 25px;
+  height: 25px;
+  margin: 0px;
+  padding: 0 5px;
+  width: 200px;
+}
+.registration-page .login input[type="text"] {
+  height: 22px;
+  font-size: 12px;
+  line-height: 22px;
+  color: #525252;
+  padding: 0 5px;
+  width: 200px;
+}
 .openid-signin,
 .meta,
 .user-profile-edit-page {
@@ -2780,24 +2812,20 @@ ul#related-tags li {
   padding-left: 0px;
   font-size: 16px;
 }
-.openid-signin form,
 .meta form,
 .users-page form,
 .user-profile-edit-page form,
 .user-profile-page form {
   margin-bottom: 15px;
 }
-.openid-signin input[type="text"],
 .meta input[type="text"],
 .users-page input[type="text"],
 .user-profile-edit-page input[type="text"],
 .user-profile-page input[type="text"],
-.openid-signin input[type="password"],
 .meta input[type="password"],
 .users-page input[type="password"],
 .user-profile-edit-page input[type="password"],
 .user-profile-page input[type="password"],
-.openid-signin select,
 .meta select,
 .users-page select,
 .user-profile-edit-page select,
@@ -2808,7 +2836,6 @@ ul#related-tags li {
   width: 395px;
   font-size: 14px;
 }
-.openid-signin select,
 .meta select,
 .users-page select,
 .user-profile-edit-page select,
@@ -2816,7 +2843,6 @@ ul#related-tags li {
   width: 405px;
   height: 30px;
 }
-.openid-signin textarea,
 .meta textarea,
 .users-page textarea,
 .user-profile-edit-page textarea,
@@ -2826,7 +2852,6 @@ ul#related-tags li {
   width: 395px;
   font-size: 14px;
 }
-.openid-signin input.submit,
 .meta input.submit,
 .users-page input.submit,
 .user-profile-edit-page input.submit,
@@ -2834,7 +2859,6 @@ ul#related-tags li {
   font-weight: normal;
   margin: 5px 0px;
 }
-.openid-signin .cancel,
 .meta .cancel,
 .users-page .cancel,
 .user-profile-edit-page .cancel,
@@ -2842,14 +2866,12 @@ ul#related-tags li {
   background: url(../images/small-button-cancel.png) repeat-x top !important;
   color: #525252 !important;
 }
-.openid-signin .cancel:hover,
 .meta .cancel:hover,
 .users-page .cancel:hover,
 .user-profile-edit-page .cancel:hover,
 .user-profile-page .cancel:hover {
   background: url(../images/small-button-cancel.png) repeat-x bottom !important;
 }
-.openid-signin .re,
 .meta .re,
 .users-page .re,
 .user-profile-edit-page .re,
@@ -2881,12 +2903,10 @@ ul#related-tags li {
 .openid-signin form {
   margin-bottom: 5px;
 }
-#email-input-fs input[type="text"],
 #local_login_buttons input[type="text"],
 #password-fs input[type="text"],
 #openid-fs input[type="text"],
 #signup-form input[type="text"],
-#email-input-fs input[type="password"],
 #local_login_buttons input[type="password"],
 #password-fs input[type="password"],
 #openid-fs input[type="password"],
@@ -3006,8 +3026,17 @@ a:hover.medal {
   padding: 5px;
 }
 .user-profile-page h2 {
-  padding: 10px 0px 10px 0px;
+  padding: 30px 0px 10px 0px;
   font-family: 'Open Sans Condensed', Arial, sans-serif;
+}
+.user-profile-page .user-stats-table h2 {
+  padding-top: 10px;
+}
+.user-profile-page .user-stats-table.badges {
+  margin-bottom: 30px;
+}
+.user-profile-page select {
+  margin-bottom: 12px;
 }
 .user-profile-page .up-votes,
 .user-profile-page .down-votes {
@@ -3029,8 +3058,15 @@ a:hover.medal {
   margin-top: 10px;
   margin-bottom: 10px;
 }
-.user-profile-page select {
-  margin-bottom: 12px;
+.user-profile-page .pager {
+  margin-bottom: 0;
+}
+.user-profile-page .paginator {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+.user-profile-page .users-questions {
+  margin-top: -10px;
 }
 .user-details {
   font-size: 13px;
@@ -3754,8 +3790,9 @@ ul.post-retag {
 }
 ul.post-retag input {
   width: 400px;
-  height: 1.5em;
-  margin: 3px 0 0 -3px;
+  height: 22px;
+  margin: 3px 0 0 -5px;
+  padding: 0 5px;
 }
 #question-controls .tags {
   margin: 0 0 3px 0;
@@ -4558,6 +4595,20 @@ td.setting-input textarea {
     width: 100%;
   }
 }
+@media screen and (max-width: 540px) {
+  .question-page .post-controls {
+    float: left;
+    margin-left: -8px;
+    padding-left: 0;
+    text-align: left;
+  }
+  .question-page .post-controls .question-close {
+    display: none;
+  }
+  .question-page div.comments.empty {
+    margin-top: 0;
+  }
+}
 @media screen and (max-width: 480px) {
   .openid-signin h1,
   .openid-signin h2 {
@@ -4577,6 +4628,15 @@ td.setting-input textarea {
     width: 100%;
   }
 }
+@media screen and (max-width: 380px) {
+  .wmd-button-bar .wmd-hr-button,
+  .wmd-button-bar .wmd-heading-button {
+    display: none;
+  }
+  .editor-status {
+    margin-right: 0;
+  }
+}
 @media screen and (max-width: 338px) {
   #scopeNav {
     display: none;
@@ -4591,6 +4651,9 @@ td.setting-input textarea {
   .edit-answer-page #id_post_author_email {
     width: 100%;
     margin: 6px 0;
+  }
+  .question-page .post-controls .offensive-flag {
+    display: none;
   }
 }
 /* language-specific fixes */

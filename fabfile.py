@@ -105,6 +105,8 @@ def install():
             run('bin/python manage.py add_askbot_user --email=contact@stephane-klein.info --password=password --user-name=stephane-klein')
             run('bin/python manage.py add_admin 1 --noinput')
 
+        put('assets/askbot/media/style/style.css', '/home/vagrant/prod/static/default/media/style/style.css')
+
     fabtools.require.supervisor.process(
         'askbot_prod',
         command='%sbin/python manage.py run_gunicorn -b unix:/tmp/askbot_prod.sock' % askbot_home,  # NOQA
